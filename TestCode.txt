@@ -1,0 +1,20 @@
+a = 555;
+b = "hello, world!";
+
+print(a, b);
+
+if (a > 0) {
+	print("Positive\n");
+}
+elif (a < 0) {
+	print("Negative\n");
+}
+else {
+	print("Zero");
+}
+
+j = 50;
+while (j) {
+	print(j);
+	j--;
+}
