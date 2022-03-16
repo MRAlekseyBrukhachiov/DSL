@@ -20,8 +20,6 @@ public class Lexer {
             }
         }
 
-        for (Token t: tokens) {
-            System.out.println(t.type + " " + t.token);
-        }
+        tokens.forEach(System.out::println);
     }
 }

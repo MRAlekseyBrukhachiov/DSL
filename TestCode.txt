@@ -1,20 +1,8 @@
-a = 555;
-b = "hello, world!";
-
-print(a, b);
-
-if (a > 0) {
-	print("Positive\n");
-}
-elif (a < 0) {
-	print("Negative\n");
-}
-else {
-	print("Zero");
-}
-
-j = 50;
-while (j) {
-	print(j);
-	j--;
-}
+size = 100 + 1
+volume = size * 2
+a = b
+b = 7
+c = 100 - 3 + 4
+do {
+    size = 100
+} while
