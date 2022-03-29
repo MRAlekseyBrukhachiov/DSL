@@ -11,6 +11,7 @@ public class Lexems {
         lexems.put("DIGIT", Pattern.compile("^0|[1-9][0-9]*"));
         lexems.put("ASSIGN_OP", Pattern.compile("="));
         lexems.put("OP", Pattern.compile("\\-|\\+|\\*|\\/"));
-        //lexems.put("DO_WHILE", Pattern.compile("do.*while"));
+        lexems.put("L_BC", Pattern.compile("\\("));
+        lexems.put("R_BC", Pattern.compile("\\)"));
     }
 }
