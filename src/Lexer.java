@@ -10,16 +10,21 @@ public class Lexer {
         this.testCode = testCode;
     }
 
-    public void start() {
-        for (String lexem: Lexems.lexems.keySet()) {
-
-            Matcher m = Lexems.lexems.get(lexem).matcher(testCode);
-
-            while (m.find()) {
-                tokens.add(new Token(lexem, m.group()));
+    private Token addToken(String val) {
+        for (String lexem : Lexems.lexems.keySet()) {
+            Matcher m = Lexems.lexems.get(lexem).matcher(val);
+            if (m.find()) {
+                return new Token(lexem, m.group());
             }
         }
+        return null;
+    }
 
+    public void start() {
+        String[] words = testCode.split("\\s+");
+        for (String word: words) {
+            tokens.add(addToken(word));
+        }
         tokens.forEach(System.out::println);
     }
 }

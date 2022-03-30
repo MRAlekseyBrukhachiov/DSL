@@ -1,5 +1,5 @@
-size = 100 + 1
-volume = size * 2
-a = b
-b = 007
-c = 100 - 3 + 4
+size = 100 + 1 ;
+volume = size * 2 ;
+a = b ;
+b = 7 ;
+c = 100 - 3 + 4 ;

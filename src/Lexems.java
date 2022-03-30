@@ -13,5 +13,6 @@ public class Lexems {
         lexems.put("OP", Pattern.compile("\\-|\\+|\\*|\\/"));
         lexems.put("L_BC", Pattern.compile("\\("));
         lexems.put("R_BC", Pattern.compile("\\)"));
+        lexems.put("ENDL", Pattern.compile("\\;"));
     }
 }
