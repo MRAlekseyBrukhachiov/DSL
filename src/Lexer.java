@@ -17,7 +17,7 @@ public class Lexer {
                 return new Token(lexem, m.group());
             }
         }
-        return null;
+        throw new IllegalArgumentException("Illegal value: " + val);
     }
 
     public void start() {
@@ -25,6 +25,11 @@ public class Lexer {
         for (String word: words) {
             tokens.add(addToken(word));
         }
-        tokens.forEach(System.out::println);
+
+        //tokens.forEach(System.out::println);
+    }
+
+    public ArrayList<Token> getTokens() {
+        return tokens;
     }
 }

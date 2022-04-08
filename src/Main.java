@@ -24,8 +24,17 @@ public class Main {
         String testCode = getCode();
         Lexems lex = new Lexems();
         Lexer lexer = new Lexer(testCode);
+        lexer.start();
 
         System.out.println(testCode+ "\n");
-        lexer.start();
+        int len = 0;
+        for (Token token: lexer.getTokens()) {
+            if (token.getType() == "ENDL") {
+                len++;
+            }
+        }
+        Parser parser = new Parser(lexer.getTokens(), len);
+        parser.lang();
+        //lexer.start();
     }
 }
