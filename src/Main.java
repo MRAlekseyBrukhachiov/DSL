@@ -10,7 +10,7 @@ public class Main {
 
         try (FileReader reader = new FileReader(file)) {
             int c;
-            while((c = reader.read())!=-1){
+            while ((c = reader.read()) != -1){
                 code = code.concat(Character.toString((char) c));
             }
         } catch (IOException e) {
@@ -22,11 +22,9 @@ public class Main {
 
     public static void main(String[] args) {
         String testCode = getCode();
-        Lexems lex = new Lexems();
         Lexer lexer = new Lexer(testCode);
         lexer.start();
-
-        System.out.println(testCode+ "\n");
+        System.out.println("\n"+testCode+"\n");
         int len = 0;
         for (Token token: lexer.getTokens()) {
             if (token.getType() == "ENDL") {
@@ -34,7 +32,8 @@ public class Main {
             }
         }
         Parser parser = new Parser(lexer.getTokens(), len);
-        parser.lang();
-        //lexer.start();
+        try {
+            parser.lang();
+        } catch (ParserException | IndexOutOfBoundsException e) {}
     }
 }
