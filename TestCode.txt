@@ -1,5 +1,9 @@
-size = ( 100 + 1 ) / ( 100 + 34 - 7 * 7 ;
-volume = size * 2 ;
-a = 3 ;
-b = 7 ;
-c = 100 - 3 + 4 ;
+size = ( 20 + 5 ) / 5 ;
+num = 0 ;
+WHILE ( size > 0 )
+    num = num + 1
+    size = size - 1 ;
+IF ( num == 5 )
+    num = 100
+ELSE
+    num = 200 ;

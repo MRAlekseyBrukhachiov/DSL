@@ -24,7 +24,7 @@ public class Main {
         String testCode = getCode();
         Lexer lexer = new Lexer(testCode);
         lexer.start();
-        System.out.println("\n"+testCode+"\n");
+        System.out.printf("\n/****SOURCE CODE****/\n%s\n\n", testCode);
         int len = 0;
         for (Token token: lexer.getTokens()) {
             if (token.getType() == "ENDL") {
