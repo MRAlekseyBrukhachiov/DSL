@@ -6,12 +6,25 @@ OP -> "[-|+|/|*]"
 L_BC -> "("
 R_BC -> ")"
 ENDL -> ";"
+COMPARE_OP -> "==|<|>|!="
+IF -> "^IF$"
+DO -> "^DO$"
+WHILE -> "^WHILE$"
+FOR -> "^FOR$"
+ELSE -> "^ELSE$"
+
 
 lang -> expr+
-expr -> VAR ASSIGN_OP expr_value ENDL
+expr -> body ENDL
+body -> (VAR ASSIGN_OP expr_value) | if_op | while_op | do_while_op
 expr_value -> value (OP value)*
 value -> (VAR | DIGIT) | infinity
 infinity -> L_BC expr_value R_BC
+condition -> VAR COMPARE_OP expr_value
+if_op -> IF L_BC condition R_BC body+ else_op?
+else_op -> ELSE expr
+while_op -> WHILE L_BC condition R_BC body+
+do_while_op -> DO body+ WHILE L_BC condition R_BC
 */
 
 import java.util.ArrayList;
