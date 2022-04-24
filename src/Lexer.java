@@ -26,7 +26,6 @@ public class Lexer {
         lexems.put("WHILE", Pattern.compile("^WHILE$"));
         lexems.put("DO", Pattern.compile("^DO$"));
         lexems.put("FOR", Pattern.compile("^FOR$"));
-        lexems.put("ELSE", Pattern.compile("^ELSE$"));
     }
 
     private Token addToken(String val) {
