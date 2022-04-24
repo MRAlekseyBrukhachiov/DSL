@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,18 +9,24 @@ public class Lexer {
     private String testCode;
     private ArrayList<Token> tokens = new ArrayList<Token>();
 
-    private final Map<String, Pattern> lexems = Map.of(
-            "VAR", Pattern.compile("[a-z_]\\w*"),
-            "DIGIT", Pattern.compile("^0|[1-9][0-9]*"),
-            "ASSIGN_OP", Pattern.compile("="),
-            "OP", Pattern.compile("\\-|\\+|\\*|\\/"),
-            "L_BC", Pattern.compile("\\("),
-            "R_BC", Pattern.compile("\\)"),
-            "ENDL", Pattern.compile("\\;")
-    );
+    private Map<String, Pattern> lexems = new HashMap<>();
 
     public Lexer(String testCode) {
         this.testCode = testCode;
+        lexems.put("VAR", Pattern.compile("[a-z_]\\w*"));
+        lexems.put("DIGIT", Pattern.compile("^0|[1-9][0-9]*"));
+        lexems.put("ASSIGN_OP", Pattern.compile("^=$"));
+        lexems.put("OP", Pattern.compile("\\-|\\+|\\*|\\/"));
+        lexems.put("L_BC", Pattern.compile("\\("));
+        lexems.put("R_BC", Pattern.compile("\\)"));
+        lexems.put("ENDL", Pattern.compile("\\;"));
+        lexems.put("COMPARE_OP", Pattern.compile("==|<|>|!="));
+        lexems.put("IF", Pattern.compile("^IF$"));
+        lexems.put("ELSE", Pattern.compile("^ELSE$"));
+        lexems.put("WHILE", Pattern.compile("^WHILE$"));
+        lexems.put("DO", Pattern.compile("^DO$"));
+        lexems.put("FOR", Pattern.compile("^FOR$"));
+        lexems.put("ELSE", Pattern.compile("^ELSE$"));
     }
 
     private Token addToken(String val) {
