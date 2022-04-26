@@ -13,19 +13,20 @@ public class Lexer {
 
     public Lexer(String testCode) {
         this.testCode = testCode;
-        lexems.put("VAR", Pattern.compile("[a-z_]\\w*"));
-        lexems.put("DIGIT", Pattern.compile("^0|[1-9][0-9]*"));
+        lexems.put("VAR", Pattern.compile("^[a-z_]\\w*$"));
+        lexems.put("DIGIT", Pattern.compile("^0|[1-9][0-9]*$"));
         lexems.put("ASSIGN_OP", Pattern.compile("^=$"));
-        lexems.put("OP", Pattern.compile("\\-|\\+|\\*|\\/"));
-        lexems.put("L_BC", Pattern.compile("\\("));
-        lexems.put("R_BC", Pattern.compile("\\)"));
-        lexems.put("ENDL", Pattern.compile("\\;"));
-        lexems.put("COMPARE_OP", Pattern.compile("==|<|>|!="));
+        lexems.put("OP", Pattern.compile("^[-|+|*|/]$"));
+        lexems.put("L_BC", Pattern.compile("^\\($"));
+        lexems.put("R_BC", Pattern.compile("^\\)$"));
+        lexems.put("ENDL", Pattern.compile("^;$"));
+        lexems.put("COMPARE_OP", Pattern.compile("^==|<|>|!=$"));
         lexems.put("IF", Pattern.compile("^IF$"));
         lexems.put("ELSE", Pattern.compile("^ELSE$"));
         lexems.put("WHILE", Pattern.compile("^WHILE$"));
         lexems.put("DO", Pattern.compile("^DO$"));
         lexems.put("FOR", Pattern.compile("^FOR$"));
+        lexems.put("DIV", Pattern.compile("^,$"));
     }
 
     private Token addToken(String val) {

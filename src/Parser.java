@@ -43,6 +43,7 @@ public class Parser {
         curToken = tokens.get(iterator);
     }
 
+
     public void VAR() throws ParserException {
         if (curToken.getType() != "VAR")
             throw new ParserException(curLine, iterator, curToken, "VAR");
@@ -103,6 +104,16 @@ public class Parser {
             throw new ParserException(curLine, iterator, curToken, "WHILE");
     }
 
+    public void FOR() throws ParserException {
+        if (curToken.getType() != "FOR")
+            throw new ParserException(curLine, iterator, curToken, "FOR");
+    }
+
+    public void DIV() throws ParserException {
+        if (curToken.getType() != "DIV")
+            throw new ParserException(curLine, iterator, curToken, "DIV");
+    }
+
     public void lang() throws ParserException {
         for (int i = 0; i < len; i++) {
             curLine++;
@@ -123,30 +134,15 @@ public class Parser {
 
     public void body() {
         if (curToken.getType() == "VAR") {
-            try {
-                VAR();
-            } catch (ParserException e) {
-                e.getInfo(curLine, iterator, e.current, e.expected);
-                //curToken = tokens.get(--iterator);
-            }
-            curToken = tokens.get(++iterator);
-
-            try {
-                ASSIGN_OP();
-            } catch (ParserException e) {
-                e.getInfo(curLine, iterator, e.current, e.expected);
-                //curToken = tokens.get(--iterator);
-            }
-            curToken = tokens.get(++iterator);
-
-            expr_value();
-
+            assign();
         } else if (curToken.getType() == "IF") {
             if_op();
         } else if (curToken.getType() == "WHILE") {
             while_op();
         } else if (curToken.getType() == "DO") {
             do_while_op();
+        } else if (curToken.getType() == "FOR") {
+            for_op();
         } else {
             try {
                 VAR();
@@ -281,7 +277,7 @@ public class Parser {
 
         do {
             body();
-        } while (curToken.getType() == "VAR" || curToken.getType() == "IF"
+        } while (curToken.getType() == "VAR" || curToken.getType() == "IF" || curToken.getType() == "FOR"
                 || curToken.getType() == "WHILE" || curToken.getType() == "DO");
 
         if (curToken.getType() == "ELSE") {
@@ -300,7 +296,7 @@ public class Parser {
 
         do {
             expr();
-        } while (curToken.getType() == "VAR" || curToken.getType() == "IF"
+        } while (curToken.getType() == "VAR" || curToken.getType() == "IF" || curToken.getType() == "FOR"
                 || curToken.getType() == "WHILE" || curToken.getType() == "DO");
     }
 
@@ -333,7 +329,7 @@ public class Parser {
 
         do {
             body();
-        } while (curToken.getType() == "VAR" || curToken.getType() == "IF"
+        } while (curToken.getType() == "VAR" || curToken.getType() == "IF" || curToken.getType() == "FOR"
                 || curToken.getType() == "WHILE" || curToken.getType() == "DO");
     }
 
@@ -348,7 +344,7 @@ public class Parser {
 
         do {
             body();
-        } while (curToken.getType() == "VAR" || curToken.getType() == "IF"
+        } while (curToken.getType() == "VAR" || curToken.getType() == "IF" || curToken.getType() == "FOR"
                 || curToken.getType() == "WHILE" || curToken.getType() == "DO");
 
         try {
@@ -384,5 +380,78 @@ public class Parser {
             //curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
+    }
+
+    public void for_op() {
+        try {
+            FOR();
+        } catch (ParserException e) {
+            e.getInfo(curLine, iterator, e.current, e.expected);
+            //curToken = tokens.get(--iterator);
+        }
+        curToken = tokens.get(++iterator);
+
+        try {
+            L_BC();
+        } catch (ParserException e) {
+            e.getInfo(curLine, iterator, e.current, e.expected);
+            //curToken = tokens.get(--iterator);
+        }
+        curToken = tokens.get(++iterator);
+
+        assign();
+
+        try {
+            DIV();
+        } catch (ParserException e) {
+            e.getInfo(curLine, iterator, e.current, e.expected);
+            curToken = tokens.get(--iterator);
+        }
+        curToken = tokens.get(++iterator);
+
+        condition();
+
+        try {
+            DIV();
+        } catch (ParserException e) {
+            e.getInfo(curLine, iterator, e.current, e.expected);
+            curToken = tokens.get(--iterator);
+        }
+        curToken = tokens.get(++iterator);
+
+        assign();
+
+        try {
+            R_BC();
+        } catch (ParserException e) {
+            e.getInfo(curLine, iterator, e.current, e.expected);
+            //curToken = tokens.get(--iterator);
+        }
+        curToken = tokens.get(++iterator);
+
+        do {
+            body();
+        } while (curToken.getType() == "VAR" || curToken.getType() == "IF" || curToken.getType() == "FOR"
+                || curToken.getType() == "WHILE" || curToken.getType() == "DO");
+    }
+
+    public void assign() {
+        try {
+            VAR();
+        } catch (ParserException e) {
+            e.getInfo(curLine, iterator, e.current, e.expected);
+            //curToken = tokens.get(--iterator);
+        }
+        curToken = tokens.get(++iterator);
+
+        try {
+            ASSIGN_OP();
+        } catch (ParserException e) {
+            e.getInfo(curLine, iterator, e.current, e.expected);
+            //curToken = tokens.get(--iterator);
+        }
+        curToken = tokens.get(++iterator);
+
+        expr_value();
     }
 }
