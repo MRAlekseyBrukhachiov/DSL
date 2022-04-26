@@ -1,22 +1,23 @@
 /*
-VAR -> "[a-z]\\w*"
-DIGIT -> "(0|[1-9])[0-9]*"
-ASSIGN_OP -> "="
-OP -> "[-|+|/|*]"
-L_BC -> "("
-R_BC -> ")"
-ENDL -> ";"
-COMPARE_OP -> "==|<|>|!="
+VAR -> "^[a-z]\\w*$"
+DIGIT -> "^0|[1-9][0-9]*$"
+ASSIGN_OP -> "^=$"
+OP -> "^[-|+|/|*]$"
+L_BC -> "^($"
+R_BC -> "^)$"
+ENDL -> "^;$"
+COMPARE_OP -> "^==|<|>|!=|<=|>=$"
 IF -> "^IF$"
-DO -> "^DO$"
-WHILE -> "^WHILE$"
-FOR -> "^FOR$"
 ELSE -> "^ELSE$"
+WHILE -> "^WHILE$"
+DO -> "^DO$"
+FOR -> "^FOR$"
+DIV -> "^,$"
 
 
 lang -> expr+
 expr -> body ENDL
-body -> (VAR ASSIGN_OP expr_value) | if_op | while_op | do_while_op
+body -> assign | if_op | while_op | do_while_op | for_op
 expr_value -> value (OP value)*
 value -> (VAR | DIGIT) | infinity
 infinity -> L_BC expr_value R_BC
@@ -25,6 +26,8 @@ if_op -> IF L_BC condition R_BC body+ else_op?
 else_op -> ELSE expr
 while_op -> WHILE L_BC condition R_BC body+
 do_while_op -> DO body+ WHILE L_BC condition R_BC
+for_op -> FOR L_BC assign DIV condition DIV assign R_BC body+
+assign -> VAR ASSIGN_OP expr_value
 */
 
 import java.util.ArrayList;
