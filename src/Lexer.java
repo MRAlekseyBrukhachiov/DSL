@@ -8,19 +8,21 @@ public class Lexer {
 
     private String testCode;
     private ArrayList<Token> tokens = new ArrayList<Token>();
-
-    private Map<String, Pattern> lexems = new HashMap<>();
+    private static Map<String, Pattern> lexems = new HashMap<>();
 
     public Lexer(String testCode) {
         this.testCode = testCode;
+    }
+
+    static {
         lexems.put("VAR", Pattern.compile("^[a-z_]\\w*$"));
-        lexems.put("DIGIT", Pattern.compile("^0|[1-9][0-9]*$"));
+        lexems.put("DIGIT", Pattern.compile("^\\d*$"));
         lexems.put("ASSIGN_OP", Pattern.compile("^=$"));
-        lexems.put("OP", Pattern.compile("^[-|+|*|/]$"));
+        lexems.put("OP", Pattern.compile("^(-|\\+|\\*|/)$"));
         lexems.put("L_BC", Pattern.compile("^\\($"));
         lexems.put("R_BC", Pattern.compile("^\\)$"));
         lexems.put("ENDL", Pattern.compile("^;$"));
-        lexems.put("COMPARE_OP", Pattern.compile("^==|<|>|!=$"));
+        lexems.put("COMPARE_OP", Pattern.compile("^(~|<|>|!=)$"));
         lexems.put("IF", Pattern.compile("^IF$"));
         lexems.put("ELSE", Pattern.compile("^ELSE$"));
         lexems.put("WHILE", Pattern.compile("^WHILE$"));
@@ -29,20 +31,32 @@ public class Lexer {
         lexems.put("DIV", Pattern.compile("^,$"));
     }
 
-    private Token addToken(String val) {
-        for (String lexem : lexems.keySet()) {
-            Matcher m = lexems.get(lexem).matcher(val);
-            if (m.find()) {
-                return new Token(lexem, m.group());
-            }
-        }
-        throw new IllegalArgumentException("Illegal value: " + val);
-    }
-
     public void start() {
-        String[] words = testCode.split("\\s+");
-        for (String word: words) {
-            tokens.add(addToken(word));
+        String tokenStart = "";
+        for (int i = 0; i < testCode.length(); i++) {
+
+            if (testCode.toCharArray()[i] == ' ') {
+                continue;
+            }
+
+            tokenStart += testCode.toCharArray()[i];
+            String tokenEnd = " ";
+
+            if (i < testCode.length() - 1) {
+                tokenEnd = tokenStart + testCode.toCharArray()[i + 1];
+            }
+
+            for (String key: lexems.keySet()) {
+                Pattern p = lexems.get(key);
+                Matcher m_1 = p.matcher(tokenStart);
+                Matcher m_2 = p.matcher(tokenEnd);
+
+                if (m_1.find() && !m_2.find()) {
+                    tokens.add(new Token(key, tokenStart));
+                    tokenStart = "";
+                    break;
+                }
+            }
         }
         tokens.forEach(System.out::println);
     }
