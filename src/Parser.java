@@ -152,7 +152,7 @@ public class Parser {
             } catch (ParserException e) {
                 e.getInfo(curLine, iterator, e.current, e.expected);
             }
-            //curToken = tokens.get(++iterator);
+            curToken = tokens.get(++iterator);
         }
     }
 
@@ -174,7 +174,7 @@ public class Parser {
                 OP();
             } catch (ParserException e) {
                 e.getInfo(curLine, iterator, e.current, e.expected);
-                //curToken = tokens.get(--iterator);
+                curToken = tokens.get(--iterator);
             }
             curToken = tokens.get(++iterator);
 
@@ -188,7 +188,7 @@ public class Parser {
                 VAR();
             } catch (ParserException e) {
                 e.getInfo(curLine, iterator, e.current, e.expected);
-                //curToken = tokens.get(--iterator);
+                curToken = tokens.get(--iterator);
             }
             curToken = tokens.get(++iterator);
         } else if (curToken.getType() == "DIGIT") {
@@ -196,7 +196,7 @@ public class Parser {
                 DIGIT();
             } catch (ParserException e) {
                 e.getInfo(curLine, iterator, e.current, e.expected);
-                //curToken = tokens.get(--iterator);
+                curToken = tokens.get(--iterator);
             }
             curToken = tokens.get(++iterator);
         } else if (curToken.getType() == "L_BC") {
@@ -207,7 +207,7 @@ public class Parser {
             } catch (ParserException e) {
                 e.getInfo(curLine, iterator, e.current, e.expected);
             }
-            //curToken = tokens.get(++iterator);
+            curToken = tokens.get(++iterator);
         }
     }
 
@@ -216,7 +216,7 @@ public class Parser {
             L_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -226,7 +226,7 @@ public class Parser {
             R_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
     }
@@ -236,7 +236,7 @@ public class Parser {
             VAR();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -256,7 +256,7 @@ public class Parser {
             IF();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -264,7 +264,7 @@ public class Parser {
             L_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -274,7 +274,7 @@ public class Parser {
             R_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -293,7 +293,7 @@ public class Parser {
             ELSE();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -308,7 +308,7 @@ public class Parser {
             WHILE();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -316,7 +316,7 @@ public class Parser {
             L_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -326,7 +326,7 @@ public class Parser {
             R_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -341,7 +341,7 @@ public class Parser {
             DO();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -362,7 +362,7 @@ public class Parser {
             IF();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -370,7 +370,7 @@ public class Parser {
             L_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -380,7 +380,7 @@ public class Parser {
             R_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
     }
@@ -390,7 +390,7 @@ public class Parser {
             FOR();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -398,7 +398,7 @@ public class Parser {
             L_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -428,7 +428,7 @@ public class Parser {
             R_BC();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -443,7 +443,7 @@ public class Parser {
             VAR();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
@@ -451,7 +451,7 @@ public class Parser {
             ASSIGN_OP();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
-            //curToken = tokens.get(--iterator);
+            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 

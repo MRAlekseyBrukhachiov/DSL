@@ -1,9 +1,9 @@
-size = ( 20 + 5 ) / 5 ;
-num = 0 ;
-FOR ( i = 0 , size != 0 , i = i + 1 )
+size = (20 + 5) / 5;
+num = 0;
+FOR (i = 0 , size != 0 , i = i + 1)
     num = num + 1
-    size = size - 1 ;
-IF ( num == 5 )
+    size = size - 1;
+IF (num ~ 5)
     num = 100
 ELSE
-    num = 200 ;
+    num = 200;
