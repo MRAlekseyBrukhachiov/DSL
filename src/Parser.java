@@ -34,11 +34,12 @@ import java.util.ArrayList;
 
 public class Parser {
 
-    public int iterator = 0;
-    public ArrayList<Token> tokens;
-    public int len;
-    public Token curToken;
-    public int curLine = 0;
+    private int iterator = 0;
+    private ArrayList<Token> tokens;
+    private int len;
+    private Token curToken;
+    private int curLine = 0;
+    public boolean correctCode = true;
 
     public Parser(ArrayList<Token> tokens, int len) {
         this.tokens = tokens;
@@ -46,75 +47,102 @@ public class Parser {
         curToken = tokens.get(iterator);
     }
 
-
     public void VAR() throws ParserException {
-        if (curToken.getType() != "VAR")
+        if (curToken.getType() != "VAR") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "VAR");
+        }
     }
 
     public void DIGIT() throws ParserException {
-        if (curToken.getType() != "DIGIT")
+        if (curToken.getType() != "DIGIT") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "DIGIT");
+        }
     }
 
     public void ASSIGN_OP() throws ParserException {
-        if (curToken.getType() != "ASSIGN_OP")
+        if (curToken.getType() != "ASSIGN_OP") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "ASSIGN_OP");
+        }
     }
 
     public void OP() throws ParserException {
-        if (curToken.getType() != "OP")
+        if (curToken.getType() != "OP") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "OP");
+        }
     }
 
     public void L_BC() throws ParserException {
-        if (curToken.getType() != "L_BC")
+        if (curToken.getType() != "L_BC") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "L_BC");
+        }
     }
 
     public void R_BC() throws ParserException {
-        if (curToken.getType() != "R_BC")
+        if (curToken.getType() != "R_BC") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "R_BC");
+        }
     }
 
     public void ENDL() throws ParserException {
-        if (curToken.getType() != "ENDL")
+        if (curToken.getType() != "ENDL") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "ENDL");
+        }
     }
 
     public void COMPARE_OP() throws ParserException {
-        if (curToken.getType() != "COMPARE_OP")
+        if (curToken.getType() != "COMPARE_OP") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "COMPARE_OP");
+        }
     }
 
     public void IF() throws ParserException {
-        if (curToken.getType() != "IF")
+        if (curToken.getType() != "IF") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "IF");
+        }
     }
 
     public void ELSE() throws ParserException {
-        if (curToken.getType() != "ELSE")
+        if (curToken.getType() != "ELSE") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "ELSE");
+        }
     }
 
     public void DO() throws ParserException {
-        if (curToken.getType() != "DO")
+        if (curToken.getType() != "DO") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "DO");
+        }
     }
 
     public void WHILE() throws ParserException {
-        if (curToken.getType() != "WHILE")
+        if (curToken.getType() != "WHILE") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "WHILE");
+        }
     }
 
     public void FOR() throws ParserException {
-        if (curToken.getType() != "FOR")
+        if (curToken.getType() != "FOR") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "FOR");
+        }
     }
 
     public void DIV() throws ParserException {
-        if (curToken.getType() != "DIV")
+        if (curToken.getType() != "DIV") {
+            correctCode = false;
             throw new ParserException(curLine, iterator, curToken, "DIV");
+        }
     }
 
     public void lang() throws ParserException {
