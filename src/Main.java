@@ -23,17 +23,24 @@ public class Main {
     public static void main(String[] args) {
         String testCode = getCode();
         Lexer lexer = new Lexer(testCode);
-        lexer.start();
+
         System.out.printf("\n/****SOURCE CODE****/\n%s\n\n", testCode);
         int len = 0;
+
         for (Token token: lexer.getTokens()) {
             if (token.getType() == "ENDL") {
                 len++;
             }
         }
+
         Parser parser = new Parser(lexer.getTokens(), len);
         try {
             parser.lang();
         } catch (ParserException | IndexOutOfBoundsException e) {}
+
+        if (parser.correctCode) {
+            Interpreter interpreter = new Interpreter(lexer.getTokens());
+            System.out.println(interpreter.getVariables());
+        }
     }
 }
