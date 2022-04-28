@@ -7,11 +7,12 @@ import java.util.regex.Pattern;
 public class Lexer {
 
     private String testCode;
-    private ArrayList<Token> tokens = new ArrayList<Token>();
+    private ArrayList<Token> tokens = new ArrayList<>();
     private static Map<String, Pattern> lexems = new HashMap<>();
 
     public Lexer(String testCode) {
         this.testCode = testCode;
+        run();
     }
 
     static {
@@ -31,7 +32,7 @@ public class Lexer {
         lexems.put("DIV", Pattern.compile("^,$"));
     }
 
-    public void start() {
+    private void run() {
         String tokenStart = "";
         for (int i = 0; i < testCode.length(); i++) {
 
