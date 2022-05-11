@@ -27,6 +27,28 @@ public class Interpreter {
         };
     }
 
+    public boolean compare(Token comp, double first, double second) {
+        boolean result_comparison_bool = false;
+        switch (comp.getToken()){
+            case ">":
+                if (Double.compare(first, second) == 1)
+                    result_comparison_bool = true;
+                else result_comparison_bool = false;
+                break;
+            case "~":
+                if (Double.compare(first, second) == 0)
+                    result_comparison_bool = true;
+                else result_comparison_bool = false;
+                break;
+            case "<":
+                if (Double.compare(first, second) == -1)
+                    result_comparison_bool = true;
+                else result_comparison_bool = false;
+                break;
+        }
+        return result_comparison_bool;
+    }
+
     public Interpreter(ArrayList<Token> infixExpr) {
         this.infixExpr = infixExpr;
         run();
@@ -35,14 +57,57 @@ public class Interpreter {
     private void run() {
         int temp = 0;
         int indexVar = 0;
+        int comparison_op_index = 0;
+        double first = 0.0;
+        double second = 0.0;
         for (int i = 0; i < infixExpr.size(); i++) {
-            if (infixExpr.get(i).getType() == "ASSIGN_OP") {
+            Token cur = infixExpr.get(i);
+            if (cur.getType() == "ASSIGN_OP") {
                 indexVar = i - 1;
                 temp = i + 1;
-            }
-            if (infixExpr.get(i).getType() == "ENDL") {
+                while (cur.getType() != "ENDL") {
+                    i++;
+                    cur = infixExpr.get(i);
+                }
                 double rez = calc(toPostfix(infixExpr, temp, i));
                 variables.put(infixExpr.get(indexVar).getToken(), rez);
+            }
+            if (cur.getType() == "IF") {
+                int first_argument_index = i + 2;
+                int second_argument_index = i + 4;
+                comparison_op_index = i + 3;
+                second = 0;
+                first = variables.get(infixExpr.get(first_argument_index).getToken());
+                if (infixExpr.get(second_argument_index).getType() == "DIGIT") {
+                    second = Double.parseDouble(infixExpr.get(second_argument_index).getToken());
+                }
+                if (infixExpr.get(second_argument_index).getType() == "VAR") {
+                    second = variables.get(infixExpr.get(second_argument_index).getToken());
+                }
+                i += 6;
+                cur = infixExpr.get(i);
+                if (!compare(infixExpr.get(comparison_op_index), first, second)) {
+                    while (cur.getType() != "ENDL") {
+                        if (cur.getType() == "ELSE") {
+                            break;
+                        }
+                        i++;
+                        cur = infixExpr.get(i);
+                    }
+                } else {
+                    indexVar = i;
+                    temp = i + 2;
+                    while (cur.getType() != "ELSE") {
+                        i++;
+                        cur = infixExpr.get(i);
+                    }
+                    double rez = calc(toPostfix(infixExpr, temp, i));
+                    variables.put(infixExpr.get(indexVar).getToken(), rez);
+                    while (cur.getType() != "ENDL") {
+                        i++;
+                        cur = infixExpr.get(i);
+                    }
+                }
             }
         }
     }
