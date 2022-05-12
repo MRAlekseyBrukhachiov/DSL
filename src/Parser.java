@@ -34,17 +34,21 @@ import java.util.ArrayList;
 
 public class Parser {
 
-    private int iterator = 0;
-    private ArrayList<Token> tokens;
-    private int len;
+    private final ArrayList<Token> tokens;
+    private final int len;
+
+    private int iterator;
+    private int curLine;
+    public boolean correctCode;
     private Token curToken;
-    private int curLine = 0;
-    public boolean correctCode = true;
 
     public Parser(ArrayList<Token> tokens, int len) {
         this.tokens = tokens;
         this.len = len;
         curToken = tokens.get(iterator);
+        curLine = 0;
+        iterator = 0;
+        correctCode = true;
     }
 
     public void VAR() throws ParserException {
