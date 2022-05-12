@@ -376,21 +376,13 @@ public class Parser {
         do {
             body();
         } while (curToken.getType() == "VAR" || curToken.getType() == "IF" || curToken.getType() == "FOR"
-                || curToken.getType() == "WHILE" || curToken.getType() == "DO");
+                || curToken.getType() != "WHILE" || curToken.getType() == "DO");
 
         try {
             WHILE();
         } catch (ParserException e) {
             e.getInfo(curLine, iterator, e.current, e.expected);
             //curToken = tokens.get(--iterator);
-        }
-        curToken = tokens.get(++iterator);
-
-        try {
-            IF();
-        } catch (ParserException e) {
-            e.getInfo(curLine, iterator, e.current, e.expected);
-            curToken = tokens.get(--iterator);
         }
         curToken = tokens.get(++iterator);
 
