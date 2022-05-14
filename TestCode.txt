@@ -1,8 +1,7 @@
-size=5*((20 + 5) / 5) +1 ;
-b = 5;
-a = 3;
-IF (size < 7)
-    a = a + 1
-ELSE
-    b = 123;
-b = b + 1;
+a = 0;
+b = 0;
+PRINT(b);
+FOR ( i = 0 , i < 2 , i = i + 1 )
+    a = a + 1,
+    b = b - 1;
+PRINT(a);
