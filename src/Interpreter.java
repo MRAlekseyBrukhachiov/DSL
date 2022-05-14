@@ -5,15 +5,15 @@ import java.util.Stack;
 
 public class Interpreter {
 
-    private ArrayList<Token> infixExpr;
-    private Map<String, Double> variables = new HashMap<>();
+    private final ArrayList<Token> infixExpr;
+    private final Map<String, Double> variables = new HashMap<>();
 
     private int operationPriority(Token op) {
         return switch (op.getToken()) {
             case "(" -> 0;
             case "+", "-" -> 1;
             case "*", "/" -> 2;
-            default -> -1;
+            default -> throw new IllegalArgumentException("Illegal value: " + op.getToken());
         };
     }
 
@@ -23,30 +23,18 @@ public class Interpreter {
             case "-" -> first - second;
             case "*" -> first * second;
             case "/" -> first / second;
-            default -> -1;
+            default -> throw new IllegalArgumentException("Illegal value: " + op.getToken());
         };
     }
 
     public boolean compare(Token comp, double first, double second) {
-        boolean result_comparison_bool = false;
-        switch (comp.getToken()){
-            case ">":
-                if (Double.compare(first, second) == 1)
-                    result_comparison_bool = true;
-                else result_comparison_bool = false;
-                break;
-            case "~":
-                if (Double.compare(first, second) == 0)
-                    result_comparison_bool = true;
-                else result_comparison_bool = false;
-                break;
-            case "<":
-                if (Double.compare(first, second) == -1)
-                    result_comparison_bool = true;
-                else result_comparison_bool = false;
-                break;
-        }
-        return result_comparison_bool;
+        return switch (comp.getToken()) {
+            case ">" -> Double.compare(first, second) == 1;
+            case "~" -> Double.compare(first, second) == 0;
+            case "<" -> Double.compare(first, second) == -1;
+            case "!=" -> Double.compare(first, second) != 0;
+            default -> throw new IllegalArgumentException("Illegal value: " + comp.getToken());
+        };
     }
 
     public Interpreter(ArrayList<Token> infixExpr) {
@@ -55,11 +43,11 @@ public class Interpreter {
     }
 
     private void run() {
-        int temp = 0;
-        int indexVar = 0;
-        int comparison_op_index = 0;
-        double first = 0.0;
-        double second = 0.0;
+        int temp;
+        int indexVar;
+        int comparison_op_index;
+        double first;
+        double second;
         for (int i = 0; i < infixExpr.size(); i++) {
             Token cur = infixExpr.get(i);
             if (cur.getType() == "ASSIGN_OP") {
@@ -109,12 +97,80 @@ public class Interpreter {
                     }
                 }
             }
+            if (cur.getType() == "WHILE") {
+                int first_argument_index = i + 2;
+                int second_argument_index = i + 4;
+                comparison_op_index = i + 3;
+                second = 0;
+                first = variables.get(infixExpr.get(first_argument_index).getToken());
+                if (infixExpr.get(second_argument_index).getType() == "DIGIT") {
+                    second = Double.parseDouble(infixExpr.get(second_argument_index).getToken());
+                }
+                if (infixExpr.get(second_argument_index).getType() == "VAR") {
+                    second = variables.get(infixExpr.get(second_argument_index).getToken());
+                }
+                i += 6;
+                cur = infixExpr.get(i);
+                int start_iteration = i;
+                while (compare(infixExpr.get(comparison_op_index), first, second)) {
+                    indexVar = i;
+                    temp = i + 2;
+                    while (cur.getType() != "ENDL") {
+                        i++;
+                        cur = infixExpr.get(i);
+                    }
+                    double rez = calc(toPostfix(infixExpr, temp, i));
+                    variables.put(infixExpr.get(indexVar).getToken(), rez);
+                    i = start_iteration;
+                    cur = infixExpr.get(i);
+                    first = variables.get(cur.getToken());
+                }
+                while (cur.getType() != "ENDL") {
+                    i++;
+                    cur = infixExpr.get(i);
+                }
+            }
+            if (cur.getType() == "DO") {
+                i++;
+                int start_iteration = i;
+                do {
+                    indexVar = i;
+                    temp = i + 2;
+                    while (cur.getType() != "WHILE") {
+                        i++;
+                        cur = infixExpr.get(i);
+                    }
+                    double rez = calc(toPostfix(infixExpr, temp, i));
+                    variables.put(infixExpr.get(indexVar).getToken(), rez);
+
+                    int first_argument_index = i + 2;
+                    int second_argument_index = i + 4;
+                    comparison_op_index = i + 3;
+                    second = 0;
+                    first = variables.get(infixExpr.get(first_argument_index).getToken());
+                    if (infixExpr.get(second_argument_index).getType() == "DIGIT") {
+                        second = Double.parseDouble(infixExpr.get(second_argument_index).getToken());
+                    }
+                    if (infixExpr.get(second_argument_index).getType() == "VAR") {
+                        second = variables.get(infixExpr.get(second_argument_index).getToken());
+                    }
+                    i = start_iteration;
+                    cur = infixExpr.get(i);
+                } while (compare(infixExpr.get(comparison_op_index), first, second));
+
+                while (cur.getType() != "ENDL") {
+                    i++;
+                    cur = infixExpr.get(i);
+                }
+            }
         }
     }
 
     private ArrayList<Token> toPostfix(ArrayList<Token> infixExpr, int start, int end) {
+
         //	Выходная строка, содержащая постфиксную запись
         ArrayList<Token> postfixExpr = new ArrayList<>();
+
         //	Инициализация стека, содержащий операторы в виде символов
         Stack<Token> stack = new Stack<>();
 
@@ -144,8 +200,11 @@ public class Interpreter {
                 stack.push(c);
             }
         }
+
         //	Заносим все оставшиеся операторы из стека в выходную строку
-        postfixExpr.addAll(stack);
+        while (!stack.isEmpty()) {
+            postfixExpr.add(stack.pop());
+        }
 
         //	Возвращаем выражение в постфиксной записи
         return postfixExpr;
