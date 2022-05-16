@@ -60,10 +60,14 @@ public class Lexer {
                 }
             }
         }
-        tokens.forEach(System.out::println);
     }
 
     public ArrayList<Token> getTokens() {
         return tokens;
+    }
+
+    @Override
+    public String toString() {
+        return "Lexer" + tokens;
     }
 }

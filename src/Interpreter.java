@@ -49,6 +49,7 @@ public class Interpreter {
     private void interpret_value(String trans) {
         int indexVar = iterator - 1;
         int startExpr = iterator + 1;
+
         while (!trans.equals(cur.getType())) {
             if ("DIV".equals(cur.getType())) {
                 double rez = calc(toPostfix(infixExpr, startExpr, iterator));
@@ -59,6 +60,7 @@ public class Interpreter {
             iterator++;
             cur = infixExpr.get(iterator);
         }
+
         double rez = calc(toPostfix(infixExpr, startExpr, iterator));
         variables.put(infixExpr.get(indexVar).getToken(), rez);
     }
@@ -104,6 +106,7 @@ public class Interpreter {
     private void interpret_while() {
         int start_iteration = iterator;
         interpret_condition();
+
         while (transCondition) {
             iterator++;
             interpret_value("ENDL");
@@ -111,6 +114,7 @@ public class Interpreter {
             cur = infixExpr.get(iterator);
             interpret_condition();
         }
+
         while (!"ENDL".equals(cur.getType())) {
             iterator++;
             cur = infixExpr.get(iterator);
@@ -121,6 +125,7 @@ public class Interpreter {
         iterator += 2;
         cur = infixExpr.get(iterator);
         int start_iteration = iterator;
+
         do {
             interpret_value("WHILE");
             interpret_condition();
@@ -212,8 +217,7 @@ public class Interpreter {
                     stack.pop(); //	Удаляем открывающуюся скобку из стека
                 }
                 case "OP" -> {  //	Проверяем, содержится ли символ в списке операторов
-                    Token op = c;
-                    while (stack.size() > 0 && (operationPriority(stack.peek()) >= operationPriority(op))) {
+                    while (stack.size() > 0 && (operationPriority(stack.peek()) >= operationPriority(c))) {
                         postfixExpr.add(stack.pop());
                     } // Заносим в выходную строку все операторы из стека, имеющие более высокий приоритет
                     stack.push(c); // Заносим в стек оператор
@@ -230,8 +234,8 @@ public class Interpreter {
 
     private double calc(ArrayList<Token> postfixExpr) {
         Stack<Double> locals = new Stack<>(); // Стек для хранения чисел
-        for (int i = 0; i < postfixExpr.size(); i++) {
-            Token c = postfixExpr.get(i);
+
+        for (Token c : postfixExpr) {
             switch (c.getType()) { // Если символ число
                 case "DIGIT" -> locals.push(Double.parseDouble(c.getToken()));
                 case "VAR" -> locals.push(variables.get(c.getToken()));
@@ -242,10 +246,16 @@ public class Interpreter {
                 }
             }
         }
+
         return locals.pop();
     }
 
     public Map<String, Double> getVariables() {
         return variables;
+    }
+
+    @Override
+    public String toString() {
+        return "Interpreter" + variables;
     }
 }
