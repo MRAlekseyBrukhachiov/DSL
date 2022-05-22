@@ -3,10 +3,10 @@ import java.util.*;
 public class Interpreter {
 
     private final ArrayList<Token> infixExpr;
-    private final Map<String, Double> variables = new HashMap<>();
+    private final Map<String, Object> variables = new HashMap<>();
 
     private int iterator;
-    private Token cur;
+    private Token currentToken;
     private boolean transCondition;
 
     private int operationPriority(Token op) {
@@ -40,7 +40,7 @@ public class Interpreter {
 
     public Interpreter(ArrayList<Token> infixExpr) {
         this.infixExpr = infixExpr;
-        cur = infixExpr.get(0);
+        currentToken = infixExpr.get(0);
         iterator = 0;
         transCondition = false;
         run();
@@ -50,15 +50,15 @@ public class Interpreter {
         int indexVar = iterator - 1;
         int startExpr = iterator + 1;
 
-        while (!trans.equals(cur.getType())) {
-            if ("DIV".equals(cur.getType())) {
+        while (!trans.equals(currentToken.getType())) {
+            if ("DIV".equals(currentToken.getType())) {
                 double rez = calc(toPostfix(infixExpr, startExpr, iterator));
                 variables.put(infixExpr.get(indexVar).getToken(), rez);
                 indexVar = iterator + 1;
                 startExpr = iterator + 3;
             }
             iterator++;
-            cur = infixExpr.get(iterator);
+            currentToken = infixExpr.get(iterator);
         }
 
         double rez = calc(toPostfix(infixExpr, startExpr, iterator));
@@ -70,15 +70,15 @@ public class Interpreter {
         int comparison_op_index = iterator + 3;
         int second_argument_index = iterator + 4;
         Token s = infixExpr.get(second_argument_index);
-        double first = variables.get(infixExpr.get(first_argument_index).getToken());
+        double first = (double) variables.get(infixExpr.get(first_argument_index).getToken());
         double second = switch (s.getType()) {
             case "DIGIT" -> Double.parseDouble(s.getToken());
-            case "VAR" -> variables.get(s.getToken());
+            case "VAR" -> (double) variables.get(s.getToken());
             default ->  0.0;
         };
 
         iterator += 6;
-        cur = infixExpr.get(iterator);
+        currentToken = infixExpr.get(iterator);
 
         transCondition = compare(infixExpr.get(comparison_op_index), first, second);
     }
@@ -86,19 +86,19 @@ public class Interpreter {
     private void interpret_if() {
         interpret_condition();
         if (!transCondition) {
-            while (!"ENDL".equals(cur.getType())) {
-                if ("ELSE".equals(cur.getType())) {
+            while (!"ENDL".equals(currentToken.getType())) {
+                if ("ELSE".equals(currentToken.getType())) {
                     break;
                 }
                 iterator++;
-                cur = infixExpr.get(iterator);
+                currentToken = infixExpr.get(iterator);
             }
         } else {
             iterator++;
             interpret_value("ELSE");
-            while (!"ENDL".equals(cur.getType())) {
+            while (!"ENDL".equals(currentToken.getType())) {
                 iterator++;
-                cur = infixExpr.get(iterator);
+                currentToken = infixExpr.get(iterator);
             }
         }
     }
@@ -111,37 +111,37 @@ public class Interpreter {
             iterator++;
             interpret_value("ENDL");
             iterator = start_iteration;
-            cur = infixExpr.get(iterator);
+            currentToken = infixExpr.get(iterator);
             interpret_condition();
         }
 
-        while (!"ENDL".equals(cur.getType())) {
+        while (!"ENDL".equals(currentToken.getType())) {
             iterator++;
-            cur = infixExpr.get(iterator);
+            currentToken = infixExpr.get(iterator);
         }
     }
 
     private void interpret_do_while() {
         iterator += 2;
-        cur = infixExpr.get(iterator);
+        currentToken = infixExpr.get(iterator);
         int start_iteration = iterator;
 
         do {
             interpret_value("WHILE");
             interpret_condition();
             iterator = start_iteration;
-            cur = infixExpr.get(iterator);
+            currentToken = infixExpr.get(iterator);
         } while (transCondition);
 
-        while (!"ENDL".equals(cur.getType())) {
+        while (!"ENDL".equals(currentToken.getType())) {
             iterator++;
-            cur = infixExpr.get(iterator);
+            currentToken = infixExpr.get(iterator);
         }
     }
 
     private void interpret_for() {
         iterator += 3;
-        cur = infixExpr.get(iterator);
+        currentToken = infixExpr.get(iterator);
         interpret_value("DIV");
 
         iterator--;
@@ -150,32 +150,32 @@ public class Interpreter {
 
         int indexAfterFor = iterator + 1;
         while (transCondition) {
-            while (!"R_BC".equals(cur.getType())) {
+            while (!"R_BC".equals(currentToken.getType())) {
                 iterator++;
-                cur = infixExpr.get(iterator);
+                currentToken = infixExpr.get(iterator);
             }
             iterator += 2;
-            cur = infixExpr.get(iterator);
+            currentToken = infixExpr.get(iterator);
             interpret_value("ENDL");
 
             iterator = indexAfterFor;
-            cur = infixExpr.get(iterator);
+            currentToken = infixExpr.get(iterator);
             interpret_value("R_BC");
 
             iterator = condition;
             interpret_condition();
         }
 
-        while (!"ENDL".equals(cur.getType())) {
+        while (!"ENDL".equals(currentToken.getType())) {
             iterator++;
-            cur = infixExpr.get(iterator);
+            currentToken = infixExpr.get(iterator);
         }
     }
 
     private void interpret_print() {
         iterator++;
-        cur = infixExpr.get(iterator);
-        if ("L_BC".equals(cur.getType())) {
+        currentToken = infixExpr.get(iterator);
+        if ("L_BC".equals(currentToken.getType())) {
             Token c = infixExpr.get(iterator + 1);
             switch (c.getType()) {
                 case "DIGIT" -> System.out.println(Double.parseDouble(c.getToken()));
@@ -187,16 +187,37 @@ public class Interpreter {
         }
     }
 
+    private void interpret_list_op() {
+        LinkedList a = (LinkedList) variables.get(infixExpr.get(iterator - 1).getToken());
+        Token op = infixExpr.get(iterator + 1);
+        switch (op.getType()) {
+            case "ADD", "REMOVE", "GET", "CONTAINS" -> {
+                double value = Double.parseDouble(infixExpr.get(iterator + 3).getToken());
+                switch (op.getType()) {
+                    case "ADD" -> a.add(value);
+                    case "REMOVE" -> a.remove(value);
+                    case "GET" -> a.get((int) value);
+                    case "CONTAINS" -> System.out.println(a.contains(value));
+                }
+            }
+            case "CLEAR" -> a.clear();
+            case "SIZE" -> System.out.println(a.size());
+            case "ISEMPTY" -> System.out.println(a.isEmpty());
+        }
+    }
+
     private void run() {
         for (; iterator < infixExpr.size(); iterator++) {
-            cur = infixExpr.get(iterator);
-            switch (cur.getType()) {
+            currentToken = infixExpr.get(iterator);
+            switch (currentToken.getType()) {
                 case "ASSIGN_OP" -> interpret_value("ENDL");
                 case "IF" -> interpret_if();
                 case "WHILE" -> interpret_while();
                 case "DO" -> interpret_do_while();
                 case "FOR" -> interpret_for();
                 case "PRINT" -> interpret_print();
+                case "LIST" -> variables.put(infixExpr.get(iterator + 1).getToken(), new LinkedList());
+                case "POINT" -> interpret_list_op();
             }
         }
     }
@@ -238,7 +259,7 @@ public class Interpreter {
         for (Token c : postfixExpr) {
             switch (c.getType()) { // Если символ число
                 case "DIGIT" -> locals.push(Double.parseDouble(c.getToken()));
-                case "VAR" -> locals.push(variables.get(c.getToken()));
+                case "VAR" -> locals.push((double) variables.get(c.getToken()));
                 case "OP" -> { // Получаем значения из стека в обратном порядке
                     double second = locals.size() > 0 ? locals.pop() : 0,
                             first = locals.size() > 0 ? locals.pop() : 0;
@@ -250,7 +271,7 @@ public class Interpreter {
         return locals.pop();
     }
 
-    public Map<String, Double> getVariables() {
+    public Map<String, Object> getVariables() {
         return variables;
     }
 

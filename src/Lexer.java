@@ -31,6 +31,15 @@ public class Lexer {
         lexemes.put("FOR", Pattern.compile("^FOR$"));
         lexemes.put("DIV", Pattern.compile("^,$"));
         lexemes.put("PRINT", Pattern.compile("^PRINT$"));
+        lexemes.put("LIST", Pattern.compile("^LIST$"));
+        lexemes.put("ADD", Pattern.compile("^ADD$"));
+        lexemes.put("REMOVE", Pattern.compile("^REMOVE$"));
+        lexemes.put("CLEAR", Pattern.compile("^CLEAR$"));
+        lexemes.put("SIZE", Pattern.compile("^SIZE$"));
+        lexemes.put("GET", Pattern.compile("^GET$"));
+        lexemes.put("ISEMPTY", Pattern.compile("^ISEMPTY$"));
+        lexemes.put("CONTAINS", Pattern.compile("^CONTAINS$"));
+        lexemes.put("POINT", Pattern.compile("^\\.$"));
     }
 
     private void run() {

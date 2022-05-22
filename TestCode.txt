@@ -1,8 +1,11 @@
-a = 0;
-b = 0;
-PRINT(b);
-FOR ( i = 0 , i < 2 , i = i + 1 )
-    a = a + 1,
-    b = b - 1;
-PRINT(a);
-PRINT(20);
+LIST d;
+d.ADD(5);
+a = 5;
+b = 6;
+d.ADD(7);
+d.ADD(6);
+PRINT;
+d.REMOVE(5);
+d.CONTAINS(7);
+PRINT;
+d.CLEAR();

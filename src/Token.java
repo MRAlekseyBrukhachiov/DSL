@@ -1,3 +1,5 @@
+import java.text.MessageFormat;
+
 public class Token {
 
     private final String type;
@@ -5,7 +7,7 @@ public class Token {
 
     public Token(String type, String token) {
         this.type = type;
-        this.token = token;
+        this.token = token.replaceAll("[\n\r]", "");
     }
 
     public String getType() {
@@ -18,6 +20,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return '{' + type + " '" + token + '\'' + '}';
+        return "{%s '%s'}".formatted(type, token);
     }
 }

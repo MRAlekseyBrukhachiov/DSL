@@ -102,12 +102,19 @@ public class Parser {
 
     public void body() {
         switch (curToken.getType()) {
-            case "VAR" -> expr_assign();
+            case "VAR" -> {
+                if (Objects.equals(tokens.get(iterator + 1).getType(), "POINT")) {
+                    list_op();
+                } else {
+                    expr_assign();
+                }
+            }
             case "IF" -> if_op();
             case "WHILE" -> while_op();
             case "DO" -> do_while_op();
             case "FOR" -> for_op();
             case "PRINT" -> print();
+            case "LIST" -> list_initialize();
             default -> terminalCheck("VAR");
         }
     }
@@ -224,5 +231,29 @@ public class Parser {
             }
             terminalCheck("R_BC");
         }
+    }
+
+    public void list_initialize() {
+        terminalCheck("LIST");
+        terminalCheck("VAR");
+    }
+
+    public void list_op() {
+        terminalCheck("VAR");
+        terminalCheck("POINT");
+        switch (curToken.getType()) {
+            case "REMOVE" -> terminalCheck("REMOVE");
+            case "CLEAR" -> terminalCheck("CLEAR");
+            case "SIZE" -> terminalCheck("SIZE");
+            case "GET" -> terminalCheck("GET");
+            case "ISEMPTY" -> terminalCheck("ISEMPTY");
+            case "CONTAINS" -> terminalCheck("CONTAINS");
+            default -> terminalCheck("ADD");
+        }
+        terminalCheck("L_BC");
+        if ("DIGIT".equals(curToken.getType())) {
+            terminalCheck("DIGIT");
+        }
+        terminalCheck("R_BC");
     }
 }
