@@ -10,7 +10,7 @@ public class Main {
 
         try (FileReader reader = new FileReader(file)) {
             int c;
-            while ((c = reader.read()) != -1){
+            while ((c = reader.read()) != -1) {
                 code = code.concat(Character.toString((char) c));
             }
         } catch (IOException e) {

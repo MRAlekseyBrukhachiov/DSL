@@ -1,39 +1,3 @@
-/*
-VAR -> "^[a-z]\\w*$"
-DIGIT -> "^0|[1-9][0-9]*$"
-ASSIGN_OP -> "^=$"
-OP -> "^[-|+|/|*]$"
-L_BC -> "^($"
-R_BC -> "^)$"
-ENDL -> "^;$"
-COMPARE_OP -> "^==|<|>|!=|<=|>=$"
-IF -> "^IF$"
-ELSE -> "^ELSE$"
-WHILE -> "^WHILE$"
-DO -> "^DO$"
-FOR -> "^FOR$"
-DIV -> "^,$"
-PRINT -> "^PRINT$"
-
-
-lang -> expr+
-expr -> body ENDL
-body -> expr_assign | if_op | while_op | do_while_op | for_op | print
-expr_value -> value (OP value)*
-value -> (VAR | DIGIT) | infinity
-infinity -> L_BC expr_value R_BC
-condition -> VAR COMPARE_OP expr_value
-condition_in_br -> L_BC condition R_BC
-if_op -> IF condition_in_br body+ else_op?
-else_op -> ELSE expr
-while_op -> WHILE condition_in_br body+
-do_while_op -> DO body+ WHILE condition_in_br
-for_op -> FOR L_BC assign DIV condition DIV assign R_BC body+
-expr_assign -> assign (DIV assign)*
-assign -> VAR ASSIGN_OP expr_value
-print -> PRINT (L_BC (VAR | DIGIT) R_BC)?
-*/
-
 import java.util.ArrayList;
 import java.util.Objects;
 
